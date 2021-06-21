@@ -1,0 +1,14 @@
+---
+- name: Copy default requirements file.
+  copy:
+    src: default-requirements.yml
+    dest: "{{ ce_provision.local_dir }}/default-requirements.yml"
+
+#Do we even need to copy before? Can we just call the file from the galaxy role folder?
+- name: Install mandatory ansible-galaxy roles and collections.
+  ansible.builtin.command:
+    cmd: "ansible-galaxy install -r {{ ce_provision.local_dir }}/default-requirements.yml"
+
+- name: Install custom ansible-galaxy roles and collections.
+  ansible.builtin.command:
+    cmd: "ansible-galaxy install -r {{ ce_provision.local_dir }}/config/{{ galaxy.custom_galaxy_requirements_path }}/{{ galaxy.custom_galaxy_requirements_filename }}"
